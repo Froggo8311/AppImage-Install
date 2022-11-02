@@ -9,19 +9,10 @@ if [[ ! -f ${name} ]]; then
   exit 1
 fi
 
-# Create the Applications directory if it doesn't exist
-echo "Checking for ~/Applications"
-if [[ ! -d ~/Applications ]]; then
-  echo "Creating ~/Applications"
-  mkdir -p ~/Applications
-else
-  echo "Found ~/Applications/ ... continuing"
-fi
-
 # Set some variables
 appname=$(basename $name)
-finalapp=~/Applications/${appname}
-desk_dir=~/.local/share/applications/ # This is where the .desktop file goes
+finalapp=~/AppData/Local/share/${appname}
+desk_dir=~/AppData/Local/share/applications # This is where the .desktop file goes
 squash_dir=squashfs-root/ # this is the extracted appimage
 
 cp ${name} ${finalapp}
@@ -47,7 +38,7 @@ cp ${app_icon_location} ~/.local/share/icons/${app_icon_name}
 
 ## Edit the app.desktop file
 cp ${app_desk_location} ${desk_dir}/${app_desk_name}
-sed -i -e "s/Exec=.*/Exec=\/home\/$USER\/Applications\/${appname}/g" ${desk_dir}/${app_desk_name}
+sed -i -e "s/Exec=.*/Exec=\/home\/$USER\/AppData\/Local\/share\/${appname}/g" ${desk_dir}/${app_desk_name}
 cd /var/tmp/
 echo "So far so good! Cleaning up staging environment"
 rm -rf /var/tmp/${appname}
